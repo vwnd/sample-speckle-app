@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
 import { gql, GraphQLClient } from "graphql-request";
-import { useRouter } from "vue-router";
 
 interface State {
   speckleAPI: GraphQLClient;
