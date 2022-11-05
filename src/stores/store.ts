@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { gql, GraphQLClient } from "graphql-request";
+import { useRouter } from "vue-router";
 
 interface State {
   speckleAPI: GraphQLClient;
@@ -79,6 +80,12 @@ export const useStore = defineStore("default", {
 
       this.userInfo = response.activeUser;
       this.isAuthenticated = true;
+    },
+
+    async signOut() {
+      localStorage.removeItem("SPECKLE_APP_TOKEN");
+      localStorage.removeItem("SPECKLE_APP_REFRESH_TOKEN");
+      location.reload();
     },
   },
 });

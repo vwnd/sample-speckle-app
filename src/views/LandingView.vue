@@ -1,7 +1,10 @@
 <template>
   <div class="hero min-h-screen bg-base-200">
     <div class="hero-content text-center">
-      <div class="max-w-md">
+      <div v-if="isLoading" class="max-w-md">
+        <progress class="progress w-56"></progress>
+      </div>
+      <div v-else class="max-w-md">
         <div v-if="userInfo" class="avatar">
           <div
             class="w-24 rounded-full mb-6 ring ring-primary ring-offset-base-100 ring-offset-2"
@@ -20,21 +23,32 @@
         <button class="btn btn-primary" @click="handleGetStarted()">
           Get Started
         </button>
+        <p
+          v-if="userInfo"
+          class="py-2 text-sm text-gray-500 underline underline-offset-2 cursor-pointer"
+          @click="store.signOut()"
+        >
+          Sign out
+        </p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import router from "@/router";
 import { useStore } from "@/stores/store";
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { onMounted } from "vue";
+import { useRouter } from "vue-router";
 
 const store = useStore();
+const isLoading = ref(false);
+const router = useRouter();
 
-onMounted(() => {
-  store.fetchUserInfo();
+onMounted(async () => {
+  isLoading.value = true;
+  await store.fetchUserInfo();
+  isLoading.value = false;
 });
 
 const userInfo = computed(() => store.userInfo);
